@@ -15,10 +15,12 @@ namespace MutrajimAPI.Controllers
     public class TranslationController : ControllerBase
     {
         private readonly MutrajimDbContext _context;
+        private readonly IStorageService _fileService;
 
-        public TranslationController(MutrajimDbContext context)
+        public TranslationController(MutrajimDbContext context, IStorageService fileService)
         {
             _context = context;
+            _fileService = fileService;
         }
 
         // GET: api/Translation
@@ -84,6 +86,20 @@ namespace MutrajimAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTranslation", new { id = translation.KeyID }, translation);
+        }
+
+        //Post File Data into Database
+        [HttpPost]
+        [Route("NewKeyValue")]
+        public async Task<ActionResult<TranslationModel>> PostFileData(string SubDirectory)
+        {
+            var FileData = _fileService.Extract(SubDirectory);
+            foreach(TranslationModel data in FileData)
+            {
+                Console.WriteLine(data.KeyID + data.Key + ":" + data.Value);
+                await PostTranslation(data);
+            }
+            return Ok(FileData);
         }
 
         // DELETE: api/Translation/5

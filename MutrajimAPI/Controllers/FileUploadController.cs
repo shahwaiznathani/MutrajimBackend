@@ -28,15 +28,17 @@ namespace MutrajimAPI.Controllers
         #region Upload
         [HttpPost]
         [Route("upload")]
-        public IActionResult Upload([Required] List<IFormFile> formFiles)
+        public async Task<ActionResult> Upload()
         {
+            //parameter post-body form
             try
             {
+                var files = HttpContext.Request.Form.Files[0];
                 string subDirectory = Directory.GetCurrentDirectory() + "/FileStorage";
-                Console.WriteLine(subDirectory);
-                _fileService.UploadFile(formFiles, subDirectory);
+                Console.WriteLine(files.FileName);
+                await _fileService.UploadFile(files, subDirectory);
 
-                return Ok(new { formFiles.Count, Size = _fileService.SizeConverter(formFiles.Sum(f => f.Length)) });
+                return Ok(new { files.ContentType});
             }
             catch (Exception ex)
             {
@@ -66,25 +68,25 @@ namespace MutrajimAPI.Controllers
         #endregion
 
 
-        #region extract keys/translate
-        [HttpPost]
-        [Route("extract")]
+        //#region extract keys/translate
+        //[HttpPost]
+        //[Route("extract")]
 
-        public IActionResult Extract([Required] string subDirectory)
-        {
-            try
-            {
-                var (KeysTranslated, keys) = _fileService.Extract(subDirectory);
-                return Ok(new { KeysTranslated, keys });
+        //public IActionResult Extract([Required] string subDirectory)
+        //{
+        //    try
+        //    {
+        //        var (KeysTranslated, keys) = _fileService.Extract(subDirectory);
+        //        return Ok(new { KeysTranslated, keys });
 
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        #endregion
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        //#endregion
 
     }
 }

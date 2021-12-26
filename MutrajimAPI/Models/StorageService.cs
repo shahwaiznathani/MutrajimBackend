@@ -25,22 +25,28 @@ namespace MutrajimAPI.Models
         #endregion
 
         #region Upload File
-        public void UploadFile(List<IFormFile> files, string subDirectory)
+        public async Task<object> UploadFile( IFormFile files, string subDirectory)
         {
             subDirectory = subDirectory ?? string.Empty;
             var target = Path.Combine(_hostingEnvironment.ContentRootPath, subDirectory);
 
             Directory.CreateDirectory(target);
-
-            files.ForEach(async file =>
+            //if (files.Length <= 0);
+            var filePath = Path.Combine(target, files.FileName);
+            var stream = new FileStream(filePath, FileMode.Create);
             {
-                if (file.Length <= 0) return;
-                var filePath = Path.Combine(target, file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-            });
+                await files.CopyToAsync(stream);
+                return files;
+            }
+            //files.ForEach(async file =>
+            //{
+            //    if (file.Length <= 0) return;
+            //    var filePath = Path.Combine(target, file.FileName);
+            //    using (var stream = new FileStream(filePath, FileMode.Create))
+            //    {
+            //        await file.CopyToAsync(stream);
+            //    }
+            //});
         }
         #endregion
 
@@ -97,15 +103,14 @@ namespace MutrajimAPI.Models
         #endregion
 
         #region Extract Keys
-        public (string, List<string>) Extract(string subDirectory)
+        public List<TranslationModel> Extract(string subDirectory)
         {
             int keyCount = 0, fileCount = 0;
             subDirectory = subDirectory ?? string.Empty;
             var target = Path.Combine(_hostingEnvironment.ContentRootPath, subDirectory);
-            List<String> valArr = new List<String>();
-            //List<String> transArr = new List<String>();
+            List<TranslationModel> TransList = new List<TranslationModel>();
             string[] projectFiles = Directory.GetFiles(target, "*.json");
-
+            int i = 0;
             foreach (var file in projectFiles)
             {
                 fileCount += 1;
@@ -113,8 +118,11 @@ namespace MutrajimAPI.Models
                 var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
                 foreach (var keyValue in dict)
                 {
-                    valArr.Add(keyValue.Value);
-                    Console.WriteLine(keyValue.Key + ":" + keyValue.Value);
+                    TranslationModel translationModel = new TranslationModel(i, keyValue.Key, keyValue.Value);
+                    TransList.Add(translationModel);
+                    //ValList.Add(keyValue.Value);
+                    //KeyList.Add(keyValue.Key);
+                    //Console.WriteLine(keyValue.Key + ":" + keyValue.Value);
                     var translation = Translate(keyValue.Value);
                     dict[keyValue.Key] = translation;
 
@@ -125,7 +133,7 @@ namespace MutrajimAPI.Models
                 File.WriteAllText(file, serJson);
             }
 
-            return (Convert.ToString(keyCount), valArr);
+            return TransList;
         }
         #endregion
 
