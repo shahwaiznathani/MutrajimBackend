@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MutrajimAPI.Models;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace MutrajimAPI.Controllers
 {
@@ -99,7 +101,21 @@ namespace MutrajimAPI.Controllers
                 Console.WriteLine(data.KeyID + data.Key + ":" + data.Value);
                 await PostTranslation(data);
             }
-            return Ok(FileData);
+            return Ok(FileData); //check
+        }
+
+        //Delete the whole table once the File is downloaded
+        [HttpDelete]
+        [Route ("DeleteTable")]
+        public async Task<ActionResult<IEnumerable<TranslationModel>>> DeleteAll()
+        {
+            string sqlTrunc = "TRUNCATE TABLE " + "Translations";
+            SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Mutrajim-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            connec.Open();
+            SqlCommand cmd = new SqlCommand(sqlTrunc, connec);
+            cmd.ExecuteNonQuery();
+            connec.Close();
+            return await _context.Translations.ToListAsync();
         }
 
         // DELETE: api/Translation/5
@@ -118,6 +134,15 @@ namespace MutrajimAPI.Controllers
             return translation;
         }
 
+        // GET: api/Translation/Serialize
+        [HttpGet]
+        [Route("Serialize")]
+        public async Task<ActionResult<string>> SerializeTranslations(string subDirectory)
+        {
+            var translation = await _context.Translations.ToListAsync();
+            var FileData = _fileService.Serialize(translation, subDirectory);
+            return Ok(FileData);
+        }
         private bool TranslationExists(int id)
         {
             return _context.Translations.Any(e => e.KeyID == id);

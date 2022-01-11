@@ -13,7 +13,6 @@ namespace MutrajimAPI.Models
         (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory);
         string SizeConverter(long bytes);
         List<TranslationModel> Extract(string subDirectory);
-
-        string Translate(string word);
+        string Serialize(List<TranslationModel> translation, string subDirectory);
     }
 }

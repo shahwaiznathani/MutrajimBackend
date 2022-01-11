@@ -50,7 +50,7 @@ namespace MutrajimAPI.Controllers
         #region Download File
         [HttpGet]
         [Route("download")]
-        public IActionResult Download([Required] string subDirectory)
+        public IActionResult Download(string subDirectory)
         {
 
             try

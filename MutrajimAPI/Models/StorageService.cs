@@ -36,8 +36,9 @@ namespace MutrajimAPI.Models
             var stream = new FileStream(filePath, FileMode.Create);
             {
                 await files.CopyToAsync(stream);
-                return files;
             }
+            stream.Close(); //check
+            return files;
             //files.ForEach(async file =>
             //{
             //    if (file.Length <= 0) return;
@@ -53,7 +54,7 @@ namespace MutrajimAPI.Models
         #region Download File
         public (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory)
         {
-            var zipName = $"archive-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
+            var zipName = $"Mutrajim-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
 
             var files = Directory.GetFiles(Path.Combine(_hostingEnvironment.ContentRootPath, subDirectory)).ToList();
 
@@ -123,24 +124,45 @@ namespace MutrajimAPI.Models
                     //ValList.Add(keyValue.Value);
                     //KeyList.Add(keyValue.Key);
                     //Console.WriteLine(keyValue.Key + ":" + keyValue.Value);
-                    var translation = Translate(keyValue.Value);
-                    dict[keyValue.Key] = translation;
+                    //var translation = Translate(keyValue.Value);
+                    //dict[keyValue.Key] = translation;
 
                     keyCount += 1;
 
                 }
-                string serJson = JsonConvert.SerializeObject(dict, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(file, serJson);
+                //string serJson = JsonConvert.SerializeObject(dict, Newtonsoft.Json.Formatting.Indented);
+                //File.WriteAllText(file, serJson);
             }
 
             return TransList;
         }
         #endregion
 
-        #region Translate key
-        public string Translate(string translation)
+        #region Serialize
+        public string Serialize(List<TranslationModel> translation, string subDirectory)
         {
-            return translation;
+            string returnVal = "OK!";
+            var transList = new Dictionary<string, string>();
+            var updatedTrans = translation;
+            foreach (var item in updatedTrans)
+            {
+                transList.Add(item.Key, item.Value);
+            }
+            string[] paths = { _hostingEnvironment.ContentRootPath, subDirectory, "Updated.json" };
+            string fullPath = Path.Combine(paths);
+            if (File.Exists(fullPath))
+            {
+                string serJson = JsonConvert.SerializeObject(transList, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(fullPath, serJson);
+            }
+            else
+            {
+                using FileStream newFile = File.Create(fullPath);
+                newFile.Close();
+                string serJson = JsonConvert.SerializeObject(transList, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(fullPath, serJson);
+            }
+            return returnVal;
         }
         #endregion
 
