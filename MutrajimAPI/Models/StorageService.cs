@@ -55,7 +55,6 @@ namespace MutrajimAPI.Models
         public (string fileType, byte[] archiveData, string archiveName) DownloadFiles(string subDirectory)
         {
             var zipName = $"Mutrajim-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
-
             var files = Directory.GetFiles(Path.Combine(_hostingEnvironment.ContentRootPath, subDirectory)).ToList();
 
             using (var memoryStream = new MemoryStream())
@@ -64,7 +63,9 @@ namespace MutrajimAPI.Models
                 {
                     files.ForEach(file =>
                     {
+                        Console.WriteLine(file);
                         var theFile = archive.CreateEntry(file);
+                        Console.WriteLine(theFile);
                         using (var streamWriter = new StreamWriter(theFile.Open()))
                         {
                             streamWriter.Write(File.ReadAllText(file));
