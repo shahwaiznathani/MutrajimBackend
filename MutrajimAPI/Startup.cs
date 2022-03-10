@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.IdentityModel.Protocols;
+using MutrajimAPI.Settings;
+using MutrajimAPI.Services;
 
 namespace MutrajimAPI
 {
@@ -33,6 +35,9 @@ namespace MutrajimAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, Services.MailService>();
+
             services.AddTransient<IStorageService, StorageService>();
             //inject appSettings
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
