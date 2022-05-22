@@ -30,7 +30,7 @@ namespace MutrajimAPI.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                return BadRequest(new { message = ex });
             }
 
         }

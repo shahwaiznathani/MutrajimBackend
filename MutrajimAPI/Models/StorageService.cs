@@ -13,12 +13,13 @@ namespace MutrajimAPI.Models
 {
     public class StorageService:IStorageService
     {
+        //IHostingEnviroment
         #region Property
-        private IHostingEnvironment _hostingEnvironment;
+        private IWebHostEnvironment _hostingEnvironment;
         #endregion
 
         #region Constructor
-        public StorageService(IHostingEnvironment hostingEnvironment)
+        public StorageService(IWebHostEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
         }

@@ -31,7 +31,7 @@ namespace MutrajimAPI.Controllers
 
         [HttpPost]
         [Route("UserRegister")]
-        //POST : api/ApplicationUser/UserRegister
+        //POST : api/ApplicationUser/UserRegister //To Post User Register Info in DB
         public async Task<Object> PostApplicationUser(ApplicationUserModel model)
         {
 
@@ -49,13 +49,13 @@ namespace MutrajimAPI.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(new { message = ex });
             }
         }
 
         [HttpPost]
         [Route("Login")]
-        //POST: api/ApplicationUser/Login
+        //POST: api/ApplicationUser/Login   //Authenticate Login and provide Token
         public async Task<ActionResult> LoginFunction(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
