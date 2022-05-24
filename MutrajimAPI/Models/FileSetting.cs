@@ -7,13 +7,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MutrajimAPI.Models
 {
-    public class FileDetail
+    public class FileSetting
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int FileID { get; set; }
+        public int fileID { get; set; }
 
-        public string FileFormat { get; set; }
+        public string fileFormat { get; set; }
+
+        public string fileLocation { get; set; }
     }
 }
 

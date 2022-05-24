@@ -16,12 +16,14 @@ namespace MutrajimAPI.Controllers
     {
         #region Property
         private readonly IStorageService _fileService;
+        private readonly AuthenticationContext _context;
         #endregion
 
         #region Constructor
-        public FileUploadController(IStorageService fileService)
+        public FileUploadController(IStorageService fileService, AuthenticationContext context)
         {
             _fileService = fileService;
+            _context = context;
         }
         #endregion
 
@@ -37,7 +39,7 @@ namespace MutrajimAPI.Controllers
                 string subDirectory = Directory.GetCurrentDirectory() + "/FileStorage";
                 Console.WriteLine(files.FileName);
                 await _fileService.UploadFile(files, subDirectory);
-
+                Console.WriteLine(files.FileName + " " + files.GetType());
                 return Ok(new { files.ContentType});
             }
             catch (Exception ex)
@@ -67,26 +69,28 @@ namespace MutrajimAPI.Controllers
         }
         #endregion
 
+        //GET FILE DETAILS BY ID FOR TRANSLATION PAGE
+        [HttpGet("{id}")]
+        public async Task<ActionResult<FileSetting>> GetFile(int id)
+        {
+            var file = await _context.FileSettings.FindAsync(id);
 
-        //#region extract keys/translate
-        //[HttpPost]
-        //[Route("extract")]
+            if (file == null)
+            {
+                return NotFound();
+            }
 
-        //public IActionResult Extract([Required] string subDirectory)
-        //{
-        //    try
-        //    {
-        //        var (KeysTranslated, keys) = _fileService.Extract(subDirectory);
-        //        return Ok(new { KeysTranslated, keys });
+            return file;
+        }
+        //POST FILE DETAILS ON FILE UPLOAD
+        [HttpPost]
+        public async Task<ActionResult<FileSetting>> PostFileDetails(FileSetting file)
+        {
+            _context.FileSettings.Add(file);
+            await _context.SaveChangesAsync();
 
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-        //#endregion
+            return CreatedAtAction("GetFile", new { id = file.fileID }, file);
+        }
 
     }
 }

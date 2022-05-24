@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MutrajimAPI.Models;
 
-namespace MutrajimAPI.Migrations.Authentication
+namespace MutrajimAPI.Migrations
 {
     [DbContext(typeof(AuthenticationContext))]
-    [Migration("20211219193410_MyMigration")]
-    partial class MyMigration
+    [Migration("20220524204141_UpdatedMigration")]
+    partial class UpdatedMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,12 +227,82 @@ namespace MutrajimAPI.Migrations.Authentication
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("MutrajimAPI.Models.FileSetting", b =>
+                {
+                    b.Property<int>("fileID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("fileFormat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("fileLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("fileID");
+
+                    b.ToTable("FileSettings");
+                });
+
+            modelBuilder.Entity("MutrajimAPI.Models.LocaleSetting", b =>
+                {
+                    b.Property<int>("settingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("SourceLanguage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SourceLanguageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TargetLanguage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TargetLanguageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("settingId");
+
+                    b.ToTable("LocaleSettings");
+                });
+
+            modelBuilder.Entity("MutrajimAPI.Models.TranslationModel", b =>
+                {
+                    b.Property<int>("KeyID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("KeyID");
+
+                    b.ToTable("Translations");
+                });
+
             modelBuilder.Entity("MutrajimAPI.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("fileID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("settingId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("fileID");
+
+                    b.HasIndex("settingId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -286,6 +356,21 @@ namespace MutrajimAPI.Migrations.Authentication
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MutrajimAPI.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("MutrajimAPI.Models.FileSetting", "FileDetail")
+                        .WithMany()
+                        .HasForeignKey("fileID");
+
+                    b.HasOne("MutrajimAPI.Models.LocaleSetting", "Project")
+                        .WithMany()
+                        .HasForeignKey("settingId");
+
+                    b.Navigation("FileDetail");
+
+                    b.Navigation("Project");
                 });
 #pragma warning restore 612, 618
         }

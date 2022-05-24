@@ -12,8 +12,7 @@ namespace MutrajimAPI.Models
         {
 
         }
-
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<TranslationModel> Translations { get; set; }
+        //public DbSet<Project> Projects { get; set; }
+        //public DbSet<TranslationModel> Translations { get; set; }
     }
 }

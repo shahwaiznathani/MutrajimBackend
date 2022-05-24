@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -32,7 +33,7 @@ namespace MutrajimAPI.Controllers
         [HttpPost]
         [Route("UserRegister")]
         //POST : api/ApplicationUser/UserRegister //To Post User Register Info in DB
-        public async Task<Object> PostApplicationUser(ApplicationUserModel model)
+        public async Task<Object> PostApplicationUser(ApplicationUserDTO model)
         {
 
             var applicationUser = new ApplicationUser()
@@ -56,7 +57,7 @@ namespace MutrajimAPI.Controllers
         [HttpPost]
         [Route("Login")]
         //POST: api/ApplicationUser/Login   //Authenticate Login and provide Token
-        public async Task<ActionResult> LoginFunction(LoginModel model)
+        public async Task<ActionResult> LoginFunction(LoginDTO model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -80,6 +81,63 @@ namespace MutrajimAPI.Controllers
             {
                 return BadRequest(new { message = "Username or Password is incorrect" });
             }
+        }
+        //Store Id to session sotrage and fetch from user
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ApplicationUser>> GetUserById(string id)
+        {
+            var currentUser = await _userManager.FindByIdAsync(id.ToString());
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            return currentUser;
+        }
+
+        [HttpPatch]
+        [Route("UpdateFileId")]
+        public async Task<ActionResult<ApplicationUser>> UpdateFileId(string id, int FileId)
+        {
+            var currentUser = await _userManager.FindByIdAsync(id);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            currentUser.fileID = FileId;
+            await _userManager.UpdateAsync(currentUser);
+
+            var isValid = TryValidateModel(currentUser);
+
+            if (!isValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return currentUser;
+        }
+
+        [HttpPatch]
+        [Route("UpdateLocaleId")]
+        public async Task<ActionResult<ApplicationUser>> UpdateSettingsId(string id, int settingId)
+        {
+            var currentUser = await _userManager.FindByIdAsync(id);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            currentUser.settingId = settingId;
+            await _userManager.UpdateAsync(currentUser);
+
+            var isValid = TryValidateModel(currentUser);
+
+            if (!isValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return currentUser;
         }
     }
 }

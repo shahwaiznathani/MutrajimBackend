@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MutrajimAPI.Models
 {
-    public class ApplicationUserModel
+    public class ApplicationUserDTO
     {
         public string UserName { get; set; }
         public string Email { get; set; }

@@ -13,25 +13,25 @@ namespace MutrajimAPI.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly MutrajimDbContext _context;
+        private readonly AuthenticationContext _context;
 
-        public ProjectController(MutrajimDbContext context)
+        public ProjectController(AuthenticationContext context)
         {
             _context = context;
         }
 
         // GET: api/Project
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<LocaleSetting>>> GetProjects()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.LocaleSettings.ToListAsync();
         }
 
         // GET: api/Project/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
+        public async Task<ActionResult<LocaleSetting>> GetProject(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.LocaleSettings.FindAsync(id);
 
             if (project == null)
             {
@@ -45,9 +45,9 @@ namespace MutrajimAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject(int id, Project project)
+        public async Task<IActionResult> PutProject(int id, LocaleSetting project)
         {
-            if (id != project.ProjectID)
+            if (id != project.settingId)
             {
                 return BadRequest();
             }
@@ -77,25 +77,25 @@ namespace MutrajimAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(Project project)
+        public async Task<ActionResult<LocaleSetting>> PostProject(LocaleSetting project)
         {
-            _context.Projects.Add(project);
+            _context.LocaleSettings.Add(project);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProject", new { id = project.ProjectID }, project);
+            return CreatedAtAction("GetProject", new { id = project.settingId }, project);
         }
 
         // DELETE: api/Project/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Project>> DeleteProject(int id)
+        public async Task<ActionResult<LocaleSetting>> DeleteProject(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
+            var project = await _context.LocaleSettings.FindAsync(id);
             if (project == null)
             {
                 return NotFound();
             }
 
-            _context.Projects.Remove(project);
+            _context.LocaleSettings.Remove(project);
             await _context.SaveChangesAsync();
 
             return project;
@@ -103,7 +103,7 @@ namespace MutrajimAPI.Controllers
 
         private bool ProjectExists(int id)
         {
-            return _context.Projects.Any(e => e.ProjectID == id);
+            return _context.LocaleSettings.Any(e => e.settingId == id);
         }
     }
 }

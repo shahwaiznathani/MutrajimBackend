@@ -16,10 +16,10 @@ namespace MutrajimAPI.Controllers
     [ApiController]
     public class TranslationController : ControllerBase
     {
-        private readonly MutrajimDbContext _context;
+        private readonly AuthenticationContext _context;
         private readonly IStorageService _fileService;
 
-        public TranslationController(MutrajimDbContext context, IStorageService fileService)
+        public TranslationController(AuthenticationContext context, IStorageService fileService)
         {
             _context = context;
             _fileService = fileService;

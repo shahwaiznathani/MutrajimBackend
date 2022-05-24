@@ -7,26 +7,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MutrajimAPI.Models
 {
-    public class Project
+    public class LocaleSetting
     {
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProjectID { get; set; }
+        public int settingId { get; set; }
 
-
-        [Column(TypeName = "nvarchar(100)")]
         public string SourceLanguage { get; set; }
 
-
-        [Column(TypeName = "nvarchar(100)")]
         public string TargetLanguage { get; set; }
 
-        [Column(TypeName = "nvarchar(100)")]
         public string SourceLanguageName { get; set; }
 
-
-        [Column(TypeName = "nvarchar(100)")]
         public string TargetLanguageName { get; set; }
     }
 }

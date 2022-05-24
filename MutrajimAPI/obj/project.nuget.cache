@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "g15fYxCy8VKXlVnhCmHoy93cWBLufQWc/umL1ZNiOlpZTaGq0cgsrM5YeLoWtzX1/4Qp0Yqpvyl0XWj/ZXG96A==",
+  "dgSpecHash": "eSRyQPfNCPcguMo9jgwrBAxzhpAoAHdxaHbfZ1+e/5hyTWKzA84MuAGOIlfTekL98rowZcnJreFs6CzaEdwbWQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Shahwaiz Nathani\\Desktop\\mutrajim-fyp\\MutrajimAPI\\MutrajimAPI\\MutrajimAPI.csproj",
   "expectedPackageFiles": [
@@ -15,6 +15,7 @@
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\5.0.2\\microsoft.aspnetcore.identity.entityframeworkcore.5.0.2.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\5.0.2\\microsoft.aspnetcore.identity.ui.5.0.2.nupkg.sha512",
+    "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\6.0.5\\microsoft.aspnetcore.jsonpatch.6.0.5.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\5.0.0\\microsoft.aspnetcore.razor.language.5.0.0.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\microsoft.aspnetcore.razor.runtime\\2.2.0\\microsoft.aspnetcore.razor.runtime.2.2.0.nupkg.sha512",
@@ -72,7 +73,7 @@
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\mimekit\\3.1.1\\mimekit.3.1.1.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\netcore.mailkit\\2.0.3\\netcore.mailkit.2.0.3.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
+    "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\newtonsoft.json.bson\\1.0.1\\newtonsoft.json.bson.1.0.1.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
     "C:\\Users\\Shahwaiz Nathani\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

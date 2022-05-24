@@ -12,6 +12,13 @@ namespace MutrajimAPI.Models
         [Column(TypeName = "nvarchar(100)")]
         public  string FullName { get; set; }
 
+        public int? fileID { get; set; }
 
+        [ForeignKey("fileID")]
+        public virtual FileSetting FileDetail { get; set; }
+        public int? settingId { get; set; }
+
+        [ForeignKey("settingId")]
+        public virtual LocaleSetting LocaleSetting { get; set; }
     }
 }

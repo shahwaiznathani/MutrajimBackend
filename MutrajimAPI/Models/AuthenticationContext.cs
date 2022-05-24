@@ -13,7 +13,9 @@ namespace MutrajimAPI.Models
         {
 
         }
-
+        public DbSet<LocaleSetting> LocaleSettings { get; set; }
+        public DbSet<TranslationModel> Translations { get; set; }
+        public DbSet<FileSetting> FileSettings { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
     }
 }
