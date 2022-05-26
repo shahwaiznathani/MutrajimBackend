@@ -23,7 +23,8 @@ namespace MutrajimAPI.Controllers
         private SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationSettings _appSettings;
 
-        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,IOptions<ApplicationSettings> appSettings)
+        public ApplicationUserController(UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager,IOptions<ApplicationSettings> appSettings)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -35,7 +36,6 @@ namespace MutrajimAPI.Controllers
         //POST : api/ApplicationUser/UserRegister //To Post User Register Info in DB
         public async Task<Object> PostApplicationUser(ApplicationUserDTO model)
         {
-
             var applicationUser = new ApplicationUser()
             {
                 UserName = model.UserName,
@@ -75,7 +75,9 @@ namespace MutrajimAPI.Controllers
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-                return Ok(new { token });
+                var Id = user.Id;
+                HttpContext.Session.SetString("UserId", Id);
+                return Ok(new { token , Id});
             }
             else
             {
@@ -86,7 +88,8 @@ namespace MutrajimAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ApplicationUser>> GetUserById(string id)
         {
-            var currentUser = await _userManager.FindByIdAsync(id.ToString());
+            var sessionuserId = HttpContext.Session.GetString("UserId");
+            var currentUser = await _userManager.FindByIdAsync(sessionuserId);
 
             if (currentUser == null)
             {
@@ -96,17 +99,32 @@ namespace MutrajimAPI.Controllers
             return currentUser;
         }
 
-        [HttpPatch]
-        [Route("UpdateFileId")]
-        public async Task<ActionResult<ApplicationUser>> UpdateFileId(string id, int FileId)
+        [HttpGet]
+        [Route("GetByName")]
+        public async Task<ActionResult<ApplicationUser>> GetUserByName(string uname)
         {
-            var currentUser = await _userManager.FindByIdAsync(id);
+            var currentUser = await _userManager.FindByNameAsync(uname);
 
             if (currentUser == null)
             {
                 return NotFound();
             }
-            currentUser.fileID = FileId;
+
+            return currentUser;
+        }
+
+        //patch api used as post
+        [HttpPost]
+        [Route("UpdateFileId")]
+        public async Task<ActionResult<ApplicationUser>> UpdateFileId(UpdateFileIdDTO dto)
+        {
+            var currentUser = await _userManager.FindByIdAsync(dto.UserId);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            currentUser.fileID = dto.FileId;
             await _userManager.UpdateAsync(currentUser);
 
             var isValid = TryValidateModel(currentUser);
@@ -118,17 +136,18 @@ namespace MutrajimAPI.Controllers
             return currentUser;
         }
 
-        [HttpPatch]
+        //patch api used as post
+        [HttpPost]
         [Route("UpdateLocaleId")]
-        public async Task<ActionResult<ApplicationUser>> UpdateSettingsId(string id, int settingId)
-        {
-            var currentUser = await _userManager.FindByIdAsync(id);
+        public async Task<ActionResult<ApplicationUser>> UpdateSettingsId(UpdateLocaleIdDTO dto)
+        { 
+            var currentUser = await _userManager.FindByIdAsync(dto.UserId);
 
             if (currentUser == null)
             {
                 return NotFound();
             }
-            currentUser.settingId = settingId;
+            currentUser.settingId = dto.LocaleId;
             await _userManager.UpdateAsync(currentUser);
 
             var isValid = TryValidateModel(currentUser);

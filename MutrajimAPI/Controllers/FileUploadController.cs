@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MutrajimAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -84,12 +86,29 @@ namespace MutrajimAPI.Controllers
         }
         //POST FILE DETAILS ON FILE UPLOAD
         [HttpPost]
-        public async Task<ActionResult<FileSetting>> PostFileDetails(FileSetting file)
+        [Route("PostFileSetting")]
+        public async Task<ActionResult<FileSetting>> PostFileDetails(FileSettingDTO dto)
         {
+            FileSetting file = new FileSetting();
+            file.fileLocation = Directory.GetCurrentDirectory() + "/FileStorage/" + dto.name;
+            file.fileFormat = dto.type;
             _context.FileSettings.Add(file);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetFile", new { id = file.fileID }, file);
+        }
+
+        [HttpDelete]
+        [Route("DeleteTable")]
+        public async Task<ActionResult<IEnumerable<TranslationModel>>> DeleteAll()
+        {
+            string sqlTrunc = "TRUNCATE TABLE " + "FileSettings";
+            SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Identity-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            connec.Open();
+            SqlCommand cmd = new SqlCommand(sqlTrunc, connec);
+            cmd.ExecuteNonQuery();
+            connec.Close();
+            return await _context.Translations.ToListAsync();
         }
 
     }

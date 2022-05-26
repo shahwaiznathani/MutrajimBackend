@@ -16,6 +16,7 @@ namespace MutrajimAPI.Models
         public string fileFormat { get; set; }
 
         public string fileLocation { get; set; }
+
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MutrajimAPI.Models;
 using System;
@@ -99,6 +100,19 @@ namespace MutrajimAPI.Controllers
             await _context.SaveChangesAsync();
 
             return project;
+        }
+
+        [HttpDelete]
+        [Route("DeleteTable")]
+        public async Task<ActionResult<IEnumerable<TranslationModel>>> DeleteAll()
+        {
+            string sqlTrunc = "TRUNCATE TABLE " + "LocaleSettings";
+            SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Identity-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            connec.Open();
+            SqlCommand cmd = new SqlCommand(sqlTrunc, connec);
+            cmd.ExecuteNonQuery();
+            connec.Close();
+            return await _context.Translations.ToListAsync();
         }
 
         private bool ProjectExists(int id)

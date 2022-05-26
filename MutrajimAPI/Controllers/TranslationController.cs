@@ -110,7 +110,7 @@ namespace MutrajimAPI.Controllers
         public async Task<ActionResult<IEnumerable<TranslationModel>>> DeleteAll()
         {
             string sqlTrunc = "TRUNCATE TABLE " + "Translations";
-            SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Mutrajim-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Identity-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");
             connec.Open();
             SqlCommand cmd = new SqlCommand(sqlTrunc, connec);
             cmd.ExecuteNonQuery();

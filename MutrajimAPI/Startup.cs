@@ -20,6 +20,7 @@ using System.Text;
 using Microsoft.IdentityModel.Protocols;
 using MutrajimAPI.Settings;
 using MutrajimAPI.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace MutrajimAPI
 {
@@ -37,6 +38,9 @@ namespace MutrajimAPI
         {
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, Services.MailService>();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
 
             services.AddTransient<IStorageService, StorageService>();
             //inject appSettings
@@ -103,6 +107,8 @@ namespace MutrajimAPI
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MutrajimAPI v1"));
             }
             app.UseAuthentication();
+
+            app.UseSession();
 
             app.UseHttpsRedirection();
 
