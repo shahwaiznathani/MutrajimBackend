@@ -106,12 +106,12 @@ namespace MutrajimAPI.Models
         #endregion
 
         #region Extract Keys
-        public List<TranslationModel> Extract(string subDirectory)
+        public List<KeyValueModel> Extract(string subDirectory)
         {
             int keyCount = 0, fileCount = 0;
             subDirectory = subDirectory ?? string.Empty;
             var target = Path.Combine(_hostingEnvironment.ContentRootPath, subDirectory);
-            List<TranslationModel> TransList = new List<TranslationModel>();
+            List<KeyValueModel> TransList = new List<KeyValueModel>();
             string[] projectFiles = Directory.GetFiles(target, "*.json");
             int i = 0;
             foreach (var file in projectFiles)
@@ -121,7 +121,7 @@ namespace MutrajimAPI.Models
                 var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
                 foreach (var keyValue in dict)
                 {
-                    TranslationModel translationModel = new TranslationModel(i, keyValue.Key, keyValue.Value);
+                    KeyValueModel translationModel = new KeyValueModel(i, keyValue.Key, keyValue.Value);
                     TransList.Add(translationModel);
                     //ValList.Add(keyValue.Value);
                     //KeyList.Add(keyValue.Key);
@@ -141,7 +141,7 @@ namespace MutrajimAPI.Models
         #endregion
 
         #region Serialize
-        public string Serialize(List<TranslationModel> translation, string subDirectory)
+        public string Serialize(List<KeyValueModel> translation, string subDirectory)
         {
             string returnVal = "OK!";
             var transList = new Dictionary<string, string>();

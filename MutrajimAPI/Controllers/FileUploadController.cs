@@ -100,7 +100,7 @@ namespace MutrajimAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteTable")]
-        public async Task<ActionResult<IEnumerable<TranslationModel>>> DeleteAll()
+        public async Task<ActionResult<IEnumerable<KeyValueModel>>> DeleteAll()
         {
             string sqlTrunc = "TRUNCATE TABLE " + "FileSettings";
             SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Identity-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");

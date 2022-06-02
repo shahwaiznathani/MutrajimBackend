@@ -12,23 +12,23 @@ namespace MutrajimAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
+    public class LocaleController : ControllerBase
     {
         private readonly AuthenticationContext _context;
 
-        public ProjectController(AuthenticationContext context)
+        public LocaleController(AuthenticationContext context)
         {
             _context = context;
         }
 
-        // GET: api/Project
+        // GET: api/Locale
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LocaleSetting>>> GetProjects()
         {
             return await _context.LocaleSettings.ToListAsync();
         }
 
-        // GET: api/Project/5
+        // GET: api/Locale/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LocaleSetting>> GetProject(int id)
         {
@@ -42,7 +42,7 @@ namespace MutrajimAPI.Controllers
             return project;
         }
 
-        // PUT: api/Project/5
+        // PUT: api/Locale/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
@@ -74,7 +74,7 @@ namespace MutrajimAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Project
+        // POST: api/Locale
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
@@ -86,7 +86,7 @@ namespace MutrajimAPI.Controllers
             return CreatedAtAction("GetProject", new { id = project.settingId }, project);
         }
 
-        // DELETE: api/Project/5
+        // DELETE: api/Locale/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<LocaleSetting>> DeleteProject(int id)
         {
@@ -104,7 +104,7 @@ namespace MutrajimAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteTable")]
-        public async Task<ActionResult<IEnumerable<TranslationModel>>> DeleteAll()
+        public async Task<ActionResult<IEnumerable<KeyValueModel>>> DeleteAll()
         {
             string sqlTrunc = "TRUNCATE TABLE " + "LocaleSettings";
             SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Identity-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");

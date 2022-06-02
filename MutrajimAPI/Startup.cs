@@ -52,9 +52,6 @@ namespace MutrajimAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MutrajimAPI", Version = "v1" });
             });
 
-            services.AddDbContext<MutrajimDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
-
             services.AddDbContext<AuthenticationContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 

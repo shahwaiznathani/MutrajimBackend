@@ -30,10 +30,9 @@ namespace MutrajimAPI.Controllers
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
         }
-
+        //POST : api/ApplicationUser/UserRegister //To Post User Register Info in DB
         [HttpPost]
         [Route("UserRegister")]
-        //POST : api/ApplicationUser/UserRegister //To Post User Register Info in DB
         public async Task<Object> PostApplicationUser(ApplicationUserDTO model)
         {
             var applicationUser = new ApplicationUser()
@@ -53,10 +52,9 @@ namespace MutrajimAPI.Controllers
                 return BadRequest(new { message = ex });
             }
         }
-
+        //POST: api/ApplicationUser/Login   //Authenticate Login and provide Token
         [HttpPost]
         [Route("Login")]
-        //POST: api/ApplicationUser/Login   //Authenticate Login and provide Token
         public async Task<ActionResult> LoginFunction(LoginDTO model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
@@ -77,6 +75,7 @@ namespace MutrajimAPI.Controllers
                 var token = tokenHandler.WriteToken(securityToken);
                 var Id = user.Id;
                 HttpContext.Session.SetString("UserId", Id);
+                //return token and userid upon login
                 return Ok(new { token , Id});
             }
             else
@@ -85,11 +84,13 @@ namespace MutrajimAPI.Controllers
             }
         }
         //Store Id to session sotrage and fetch from user
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationUser>> GetUserById(string id)
+        [HttpGet]
+        [Route("UserFromSession")]
+        public async Task<ActionResult<ApplicationUser>> GetUserFromSession(string id)
         {
-            var sessionuserId = HttpContext.Session.GetString("UserId");
-            var currentUser = await _userManager.FindByIdAsync(sessionuserId);
+            //change id here to work
+            //var sessionuserId = HttpContext.Session.GetString("UserId");
+            var currentUser = await _userManager.FindByIdAsync(id);
 
             if (currentUser == null)
             {
@@ -98,7 +99,7 @@ namespace MutrajimAPI.Controllers
 
             return currentUser;
         }
-
+        //Get User Details Using UserName
         [HttpGet]
         [Route("GetByName")]
         public async Task<ActionResult<ApplicationUser>> GetUserByName(string uname)
@@ -113,7 +114,7 @@ namespace MutrajimAPI.Controllers
             return currentUser;
         }
 
-        //patch api used as post
+        //Patch api used as post
         [HttpPost]
         [Route("UpdateFileId")]
         public async Task<ActionResult<ApplicationUser>> UpdateFileId(UpdateFileIdDTO dto)
@@ -136,7 +137,7 @@ namespace MutrajimAPI.Controllers
             return currentUser;
         }
 
-        //patch api used as post
+        //Patch api used as post 
         [HttpPost]
         [Route("UpdateLocaleId")]
         public async Task<ActionResult<ApplicationUser>> UpdateSettingsId(UpdateLocaleIdDTO dto)

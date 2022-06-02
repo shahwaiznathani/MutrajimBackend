@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MutrajimAPI.Models
 {
-    public class TranslationModel
+    public class KeyValueModel
     {
          [Key]
          [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -21,13 +21,13 @@ namespace MutrajimAPI.Models
          [Column(TypeName = "nvarchar(100)")]
          public string Value { get; set; }
 
-        public TranslationModel(int id, string k, string v)
+        public KeyValueModel(int id, string k, string v)
         {
             KeyID = id;
             Key = k;
             Value = v;
         }
-        public TranslationModel()
+        public KeyValueModel()
         {
                 
         }

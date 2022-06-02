@@ -27,14 +27,14 @@ namespace MutrajimAPI.Controllers
 
         // GET: api/Translation
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TranslationModel>>> GetTranslatios()
+        public async Task<ActionResult<IEnumerable<KeyValueModel>>> GetTranslatios()
         {
             return await _context.Translations.ToListAsync();
         }
 
         // GET: api/Translation/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TranslationModel>> GetTranslation(int id)
+        public async Task<ActionResult<KeyValueModel>> GetTranslation(int id)
         {
             var translation = await _context.Translations.FindAsync(id);
 
@@ -50,7 +50,7 @@ namespace MutrajimAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTranslation(int id, TranslationModel translation)
+        public async Task<IActionResult> PutTranslation(int id, KeyValueModel translation)
         {
             if (id != translation.KeyID)
             {
@@ -82,7 +82,7 @@ namespace MutrajimAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<TranslationModel>> PostTranslation(TranslationModel translation)
+        public async Task<ActionResult<KeyValueModel>> PostTranslation(KeyValueModel translation)
         {
             _context.Translations.Add(translation);
             await _context.SaveChangesAsync();
@@ -93,10 +93,10 @@ namespace MutrajimAPI.Controllers
         //Post File Data into Database
         [HttpPost]
         [Route("NewKeyValue")]
-        public async Task<ActionResult<TranslationModel>> PostFileData(string SubDirectory)
+        public async Task<ActionResult<KeyValueModel>> PostFileData(string SubDirectory)
         {
             var FileData = _fileService.Extract(SubDirectory);
-            foreach(TranslationModel data in FileData)
+            foreach(KeyValueModel data in FileData)
             {
                 Console.WriteLine(data.KeyID + data.Key + ":" + data.Value);
                 await PostTranslation(data);
@@ -107,7 +107,7 @@ namespace MutrajimAPI.Controllers
         //Delete the whole table once the File is downloaded
         [HttpDelete]
         [Route ("DeleteTable")]
-        public async Task<ActionResult<IEnumerable<TranslationModel>>> DeleteAll()
+        public async Task<ActionResult<IEnumerable<KeyValueModel>>> DeleteAll()
         {
             string sqlTrunc = "TRUNCATE TABLE " + "Translations";
             SqlConnection connec = new SqlConnection("Server=DESKTOP-2JRO2KQ;Database=Identity-fyp-DB;Trusted_Connection=True;MultipleActiveResultSets=true");
@@ -120,7 +120,7 @@ namespace MutrajimAPI.Controllers
 
         // DELETE: api/Translation/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TranslationModel>> DeleteTranslation(int id)
+        public async Task<ActionResult<KeyValueModel>> DeleteTranslation(int id)
         {
             var translation = await _context.Translations.FindAsync(id);
             if (translation == null)
