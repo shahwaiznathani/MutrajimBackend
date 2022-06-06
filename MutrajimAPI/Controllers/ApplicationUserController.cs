@@ -86,16 +86,16 @@ namespace MutrajimAPI.Controllers
         //Store Id to session sotrage and fetch from user
         [HttpGet]
         [Route("UserFromSession")]
-        public async Task<ActionResult<ApplicationUser>> GetUserFromSession(string id)
+        public async Task<ActionResult<string>> GetUserFromSession()
         {
             //change id here to work
-            //var sessionuserId = HttpContext.Session.GetString("UserId");
-            var currentUser = await _userManager.FindByIdAsync(id);
+            var currentUser = HttpContext.Session.GetString("UserId");
+            //var currentUser = await _userManager.FindByIdAsync(id);
 
-            if (currentUser == null)
-            {
-                return NotFound();
-            }
+            //if (currentUser == null)
+            //{
+            //    return NotFound();
+            //}
 
             return currentUser;
         }

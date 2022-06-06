@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="FileStorage\" />
+    <Folder Include="ImageStorage\" />
   </ItemGroup>
 
 </Project>

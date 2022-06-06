@@ -98,8 +98,15 @@ namespace MutrajimAPI.Controllers
             var FileData = _fileService.Extract(SubDirectory);
             foreach(KeyValueModel data in FileData)
             {
-                Console.WriteLine(data.KeyID + data.Key + ":" + data.Value);
-                await PostTranslation(data);
+                try
+                {
+                    await PostTranslation(data);
+                }
+                //Console.WriteLine(data.KeyID + data.Key + ":" + data.Value);
+                catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
             }
             return Ok(FileData); //check
         }
@@ -115,6 +122,14 @@ namespace MutrajimAPI.Controllers
             SqlCommand cmd = new SqlCommand(sqlTrunc, connec);
             cmd.ExecuteNonQuery();
             connec.Close();
+
+            //Delete all files from directory
+            System.IO.DirectoryInfo di = new DirectoryInfo("FileStorage");
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
             return await _context.Translations.ToListAsync();
         }
 
